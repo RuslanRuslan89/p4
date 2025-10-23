@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AutoPost — автопостинг в Telegram, ВК, Одноклассники и другие сети. Пиши один раз — братва увидит везде.">
   <title>AutoPost | Братва в эфире</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,54 +15,41 @@
   <header class="navbar glass">
     <div class="container">
       <h1>AutoPost<span class="accent">.ru</span></h1>
-      <button id="themeToggle" class="btn-icon" aria-label="Сменить тему">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
-      </button>
     </div>
   </header>
 
   <main class="container">
     <section class="hero">
       <h2>Пиши один раз —<br><span class="highlight">братва увидит везде</span></h2>
-      <p>Автопостинг в Telegram, ВК, Одноклассники и другие сети без заморочек.</p>
+      <p class="lead">
+        AutoPost — это твой цифровой эмиссар в русскоязычный сегмент соцсетей.  
+        Публикуй контент одновременно в Telegram, ВКонтакте, Одноклассниках и других платформах — без копипаста, без заморочек.
+      </p>
     </section>
 
-    <!-- Подключение аккаунтов -->
-    <section class="cards">
-      <div class="card glass" data-platform="vk">
-        <img src="assets/icons/vk.svg" alt="ВКонтакте">
-        <h3>ВКонтакте</h3>
-        <button class="btn connect-btn">Подключить</button>
-      </div>
-      <div class="card glass" data-platform="tg">
-        <img src="assets/icons/telegram.svg" alt="Telegram">
-        <h3>Telegram</h3>
-        <button class="btn connect-btn">Подключить</button>
-      </div>
-      <div class="card glass" data-platform="ok">
-        <img src="assets/icons/ok.svg" alt="Одноклассники">
-        <h3>Одноклассники</h3>
-        <button class="btn connect-btn">Подключить</button>
-      </div>
+    <section class="info-block glass">
+      <h3>Поддерживаемые сети</h3>
+      <ul class="platform-list">
+        <li>💬 <strong>Telegram</strong> — каналы и чаты</li>
+        <li>👥 <strong>ВКонтакте</strong> — группы и паблики</li>
+        <li>🏡 <strong>Одноклассники</strong> — сообщества</li>
+        <li>...и другие русскоязычные платформы (в разработке)</li>
+      </ul>
     </section>
 
-    <!-- Редактор поста -->
-    <section class="editor glass">
-      <h3>Твой пост для братвы</h3>
-      <textarea id="postText" placeholder="Братики, сегодня эфир 🔥..."></textarea>
-      
-      <div class="platform-selector">
-        <label><input type="checkbox" value="vk"> ВК</label>
-        <label><input type="checkbox" value="tg"> TG</label>
-        <label><input type="checkbox" value="ok"> OK</label>
-      </div>
-
-      <button id="sendBtn" class="btn btn-primary">Отправить братве 🚀</button>
+    <section class="info-block glass">
+      <h3>Как это работает?</h3>
+      <p>
+        Ты пишешь пост один раз — мы разносим его по всем подключённым площадкам.  
+        Всё происходит автоматически, по расписанию или мгновенно.  
+        Ты остаёшься в эфире — мы держим связь с братвой.
+      </p>
     </section>
+
+    <footer class="footer">
+      <p>© 2025 AutoPost.ru — для тех, кто говорит с братвой на одном языке.</p>
+    </footer>
   </main>
 
-  <script src="js/main.js"></script>
 </body>
 </html>
