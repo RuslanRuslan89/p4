@@ -219,6 +219,70 @@
       font-weight: bold;
     }
 
+    /* Chart styles */
+    .chart-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .bar-chart {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+      width: 100%;
+      margin: 1.2rem 0;
+    }
+
+    .bar-group {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.8rem;
+      width: 100%;
+    }
+
+    .bar-label {
+      font-size: 0.9rem;
+      color: var(--muted);
+      width: 70px;
+      text-align: right;
+    }
+
+    .bar-container {
+      flex: 1;
+      height: 120px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      position: relative;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+    }
+
+    .bar {
+      width: 40px;
+      border-radius: 6px 6px 0 0;
+      transition: height 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .bar.manual {
+      background: #4a5568;
+      height: var(--height);
+    }
+
+    .bar.autopost {
+      background: var(--accent);
+      height: var(--height);
+    }
+
+    .bar-value {
+      font-size: 0.9rem;
+      color: var(--fg);
+      width: 60px;
+      text-align: left;
+    }
+
+    /* FAQ */
     .faq-item {
       margin-bottom: 1.5rem;
       border-bottom: 1px solid var(--border);
@@ -236,6 +300,8 @@
       .container { padding: 0 1.5rem; }
       section { padding: 3rem 0; }
       .pricing { padding: 2rem 1.5rem; }
+      .bar-label, .bar-value { font-size: 0.8rem; }
+      .bar { width: 30px; }
     }
   </style>
 </head>
@@ -265,7 +331,7 @@
       </div>
     </section>
 
-    <!-- Статистика -->
+    <!-- Статистика + График -->
     <section id="stats">
       <div class="container">
         <h2>Цифры говорят громче</h2>
@@ -274,13 +340,31 @@
             <div class="stat-number">55%</div>
             <p>Быстрее публикация контента</p>
           </div>
+          <div class="card chart-card">
+            <h4>Охват: ручная публикация vs AutoPost</h4>
+            <div class="bar-chart">
+              <div class="bar-group">
+                <div class="bar-label">Ручная</div>
+                <div class="bar-container">
+                  <div class="bar manual" style="--height: 25%;"></div>
+                </div>
+                <div class="bar-value">1 200</div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-label">AutoPost</div>
+                <div class="bar-container">
+                  <div class="bar autopost" style="--height: 100%;"></div>
+                </div>
+                <div class="bar-value">4 800</div>
+              </div>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.95rem; color: var(--muted);">
+              Синхронная публикация повышает охват на 300%
+            </p>
+          </div>
           <div class="card">
             <div class="stat-number">90%</div>
             <p>Клиентов — стримеры и медийщики</p>
-          </div>
-          <div class="card">
-            <div class="stat-number">4x</div>
-            <p>Выше охват при синхронном посте</p>
           </div>
         </div>
       </div>
