@@ -3,53 +3,422 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="AutoPost — автопостинг в Telegram, ВК, Одноклассники и другие сети. Пиши один раз — братва увидит везде.">
+  <meta name="description" content="AutoPost — автопостинг в Telegram, ВК, Одноклассники. Пиши один раз — братва увидит везде. Сервис от ELRIV.">
   <title>AutoPost | Братва в эфире</title>
-  <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
-<body class="theme-dark">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a14;
+      --fg: #eaeaff;
+      --muted: #a0a0c0;
+      --accent: #00f5d4;
+      --accent-dark: #00b8a9;
+      --card-bg: rgba(20, 20, 40, 0.5);
+      --card-hover: rgba(30, 30, 60, 0.7);
+      --border: rgba(255, 255, 255, 0.08);
+      --radius: 20px;
+      --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
 
-  <header class="navbar glass">
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Geist', system-ui, sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    section {
+      padding: 5rem 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h1, h2, h3, h4 {
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    h1 { font-size: clamp(2.5rem, 6vw, 4rem); }
+    h2 { font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 1.5rem; }
+    h3 { font-size: 1.6rem; margin-bottom: 1.2rem; }
+    h4 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+
+    p { margin-bottom: 1.2rem; color: var(--muted); }
+
+    .hero {
+      text-align: center;
+      padding: 6rem 0 4rem;
+    }
+
+    .hero h1 {
+      background: linear-gradient(90deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .byline {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-top: 1rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.8rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      background: var(--card-hover);
+      transform: translateY(-4px);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent), #fff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .platforms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .platform {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      width: 100px;
+    }
+
+    .platform-icon {
+      width: 48px;
+      height: 48px;
+      opacity: 0.9;
+    }
+
+    .steps {
+      counter-reset: step-counter;
+      margin-top: 2rem;
+    }
+
+    .step {
+      counter-increment: step-counter;
+      position: relative;
+      padding-left: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .step::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    /* Pricing */
+    .pricing {
+      background: rgba(10, 10, 20, 0.7);
+      border-radius: var(--radius);
+      padding: 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing.popular {
+      border: 2px solid var(--accent);
+      transform: scale(1.03);
+    }
+
+    .popular-tag {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .price {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 1rem 0;
+    }
+
+    .features {
+      list-style: none;
+      margin: 1.5rem 0;
+      text-align: left;
+    }
+
+    .features li {
+      padding: 0.4rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .features li::before {
+      content: "✓";
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .faq-item {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 0 5rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 0 1.5rem; }
+      section { padding: 3rem 0; }
+      .pricing { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
     <div class="container">
-      <h1>AutoPost<span class="accent">.ru</span></h1>
+      <h1>Пиши один раз —<br>братва увидит везде</h1>
+      <p class="byline">Сервис автопостинга от <strong>ELRIV</strong>. Для стримеров, медийщиков и тех, кто держит эфир.</p>
     </div>
   </header>
 
-  <main class="container">
-    <section class="hero">
-      <h2>Пиши один раз —<br><span class="highlight">братва увидит везде</span></h2>
-      <p class="lead">
-        AutoPost — это твой цифровой эмиссар в русскоязычный сегмент соцсетей.  
-        Публикуй контент одновременно в Telegram, ВКонтакте, Одноклассниках и других платформах — без копипаста, без заморочек.
-      </p>
+  <main>
+    <!-- Проблема -->
+    <section id="problem">
+      <div class="container">
+        <h2>Почему автопостинг — боль?</h2>
+        <p>Каждый день — новый пост. В Telegram, ВК, Одноклассниках... Копипаст, рассинхрон, забытые площадки. Ты тратишь время, а братва — не видит контент.</p>
+      </div>
     </section>
 
-    <section class="info-block glass">
-      <h3>Поддерживаемые сети</h3>
-      <ul class="platform-list">
-        <li>💬 <strong>Telegram</strong> — каналы и чаты</li>
-        <li>👥 <strong>ВКонтакте</strong> — группы и паблики</li>
-        <li>🏡 <strong>Одноклассники</strong> — сообщества</li>
-        <li>...и другие русскоязычные платформы (в разработке)</li>
-      </ul>
+    <!-- Решение -->
+    <section id="solution">
+      <div class="container">
+        <h2>AutoPost — твой цифровой эмиссар</h2>
+        <p>Один пост. Все платформы. Мгновенно или по расписанию. Без ошибок. Без рутины. Ты — в эфире, мы — в теме.</p>
+      </div>
     </section>
 
-    <section class="info-block glass">
-      <h3>Как это работает?</h3>
-      <p>
-        Ты пишешь пост один раз — мы разносим его по всем подключённым площадкам.  
-        Всё происходит автоматически, по расписанию или мгновенно.  
-        Ты остаёшься в эфире — мы держим связь с братвой.
-      </p>
+    <!-- Статистика -->
+    <section id="stats">
+      <div class="container">
+        <h2>Цифры говорят громче</h2>
+        <div class="card-grid">
+          <div class="card">
+            <div class="stat-number">55%</div>
+            <p>Быстрее публикация контента</p>
+          </div>
+          <div class="card">
+            <div class="stat-number">90%</div>
+            <p>Клиентов — стримеры и медийщики</p>
+          </div>
+          <div class="card">
+            <div class="stat-number">4x</div>
+            <p>Выше охват при синхронном посте</p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <footer class="footer">
-      <p>© 2025 AutoPost.ru — для тех, кто говорит с братвой на одном языке.</p>
-    </footer>
+    <!-- Платформы -->
+    <section id="platforms">
+      <div class="container">
+        <h2>Поддерживаемые сети</h2>
+        <div class="platforms">
+          <div class="platform">
+            <svg class="platform-icon" viewBox="0 0 24 24" fill="#00f5d4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.5-11.5L13.5 11.5l-1-1-3.5 3.5-1-1 4.5-4.5 1 1 2.5 2.5z"/></svg>
+            <span>Telegram</span>
+          </div>
+          <div class="platform">
+            <svg class="platform-icon" viewBox="0 0 24 24" fill="#4a76a8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-11h-2v2h-2v2h2v2h2v-2h2v-2h-2V9z"/></svg>
+            <span>ВКонтакте</span>
+          </div>
+          <div class="platform">
+            <svg class="platform-icon" viewBox="0 0 24 24" fill="#f78f24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-11h-2v2h-2v2h2v2h2v-2h2v-2h-2V9z"/></svg>
+            <span>Одноклассники</span>
+          </div>
+          <div class="platform">
+            <svg class="platform-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            <span>+ ещё</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Как работает -->
+    <section id="how">
+      <div class="container">
+        <h2>Как это работает</h2>
+        <div class="steps">
+          <div class="step">
+            <h4>Пишешь пост один раз</h4>
+            <p>Текст, картинки, видео — всё в одном редакторе.</p>
+          </div>
+          <div class="step">
+            <h4>Выбираешь площадки</h4>
+            <p>Telegram, ВК, OK — или все сразу. Можно настроить шаблоны.</p>
+          </div>
+          <div class="step">
+            <h4>Публикуешь мгновенно или по расписанию</h4>
+            <p>AutoPost делает всё сам. Ты — в эфире.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Тарифы -->
+    <section id="pricing">
+      <div class="container">
+        <h2>Тарифы</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3>Free</h3>
+            <div class="price">0 ₽</div>
+            <p>Для старта</p>
+            <ul class="features">
+              <li>До 3 постов в день</li>
+              <li>2 соцсети</li>
+              <li>Без расписания</li>
+            </ul>
+          </div>
+          <div class="card pricing popular">
+            <div class="popular-tag">Популярный</div>
+            <h3>Pro</h3>
+            <div class="price">990 ₽/мес</div>
+            <p>Для стримеров и медийщиков</p>
+            <ul class="features">
+              <li>Неограниченно постов</li>
+              <li>Все поддерживаемые сети</li>
+              <li>Планировщик до 30 дней</li>
+              <li>Аналитика охватов</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Team</h3>
+            <div class="price">2 490 ₽/мес</div>
+            <p>Для команд и агентств</p>
+            <ul class="features">
+              <li>Всё из Pro</li>
+              <li>До 5 пользователей</li>
+              <li>Общие шаблоны</li>
+              <li>Приоритетная поддержка</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="container">
+        <h2>Частые вопросы</h2>
+        <div class="faq-list">
+          <div class="faq-item">
+            <h4>Нужно ли подтверждать приложение в ВК?</h4>
+            <p>Да, но мы поможем пройти верификацию — это займёт 1–2 дня.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Можно ли постить в закрытые группы?</h4>
+            <p>Да, если у бота или токена есть права администратора.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Есть ли пробный период?</h4>
+            <p>7 дней Pro-тарифа бесплатно — без карты.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Где хранятся мои токены?</h4>
+            <p>Все данные шифруются AES-256 и хранятся в защищённой базе.</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
+  <footer>
+    <div class="container">
+      <p>© 2025 AutoPost.ru<br>Сервис от <strong>ELRIV</strong>. Для тех, кто говорит с братвой на одном языке.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Анимация при скролле
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+  </script>
 </body>
 </html>
