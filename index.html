@@ -5,21 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="AutoPost — автопостинг в Telegram, ВК, Одноклассники. Пиши один раз — братва увидит везде. Сервис от ELRIV.">
   <title>AutoPost | Братва в эфире</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%2300f5d4%22>🚀</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* =============== СБРОС И ПЕРЕМЕННЫЕ =============== */
     :root {
-      --bg: #0a0a14;
-      --fg: #eaeaff;
-      --muted: #a0a0c0;
+      --bg: #09090f;
+      --fg: #f0f0ff;
+      --muted: #a0a0c8;
       --accent: #00f5d4;
-      --accent-dark: #00b8a9;
-      --card-bg: rgba(20, 20, 40, 0.5);
-      --card-hover: rgba(30, 30, 60, 0.7);
-      --border: rgba(255, 255, 255, 0.08);
-      --radius: 20px;
-      --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      --radius: 24px;
+      --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     * {
@@ -31,21 +29,64 @@
     body {
       background: var(--bg);
       color: var(--fg);
-      font-family: 'Geist', system-ui, sans-serif;
-      line-height: 1.7;
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
       overflow-x: hidden;
     }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
+    /* =============== HERO =============== */
+    .hero {
+      padding: 8rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
 
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(0, 245, 212, 0.03), transparent 40%),
+                  radial-gradient(circle at 70% 70%, rgba(0, 245, 212, 0.02), transparent 50%);
+      animation: float 25s infinite alternate ease-in-out;
+      z-index: -1;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-20px, -20px); }
+    }
+
+    .hero h1 {
+      font-weight: 700;
+      font-size: clamp(2.8rem, 8vw, 4.8rem);
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+      font-weight: 400;
+    }
+
+    .byline {
+      margin-top: 2rem;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    /* =============== СЕКЦИИ =============== */
     section {
-      padding: 5rem 0;
+      padding: 7rem 2rem;
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(24px);
       transition: opacity 0.8s ease, transform 0.8s ease;
     }
 
@@ -54,263 +95,165 @@
       transform: translateY(0);
     }
 
-    h1, h2, h3, h4 {
+    .container {
+      max-width: 840px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 6vw, 2.8rem);
       font-weight: 700;
-      line-height: 1.2;
-    }
-
-    h1 { font-size: clamp(2.5rem, 6vw, 4rem); }
-    h2 { font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 1.5rem; }
-    h3 { font-size: 1.6rem; margin-bottom: 1.2rem; }
-    h4 { font-size: 1.2rem; margin-bottom: 0.6rem; }
-
-    p { margin-bottom: 1.2rem; color: var(--muted); }
-
-    .hero {
+      margin-bottom: 2.5rem;
       text-align: center;
-      padding: 6rem 0 4rem;
+      letter-spacing: -0.01em;
     }
 
-    .hero h1 {
-      background: linear-gradient(90deg, #fff, var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
     }
 
-    .byline {
-      font-size: 1.1rem;
+    p {
       color: var(--muted);
-      margin-top: 1rem;
+      margin-bottom: 1.4rem;
     }
 
-    .card-grid {
+    /* =============== КАРТОЧКИ =============== */
+    .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.8rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2.2rem;
       margin-top: 2rem;
     }
 
     .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      padding: 2.2rem;
       border-radius: var(--radius);
-      padding: 2rem;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      background: rgba(20, 20, 40, 0.4);
+      backdrop-filter: blur(20px);
       transition: var(--transition);
     }
 
     .card:hover {
-      background: var(--card-hover);
-      transform: translateY(-4px);
+      transform: translateY(-6px);
+      background: rgba(25, 25, 50, 0.6);
     }
 
-    .stat-number {
-      font-size: 2.5rem;
+    /* =============== СЧЁТЧИКИ =============== */
+    .stat {
+      font-size: 2.6rem;
       font-weight: 700;
       background: linear-gradient(90deg, var(--accent), #fff);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      margin-bottom: 0.5rem;
     }
 
-    .platforms {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      justify-content: center;
-      margin-top: 2rem;
-    }
-
-    .platform {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.6rem;
-      width: 100px;
-    }
-
-    .platform-icon {
-      width: 48px;
-      height: 48px;
-      opacity: 0.9;
-    }
-
-    .steps {
-      counter-reset: step-counter;
-      margin-top: 2rem;
-    }
-
-    .step {
-      counter-increment: step-counter;
-      position: relative;
-      padding-left: 3rem;
-      margin-bottom: 2rem;
-    }
-
-    .step::before {
-      content: counter(step-counter);
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 28px;
-      height: 28px;
-      background: var(--accent);
-      color: #000;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-    }
-
-    /* Pricing */
-    .pricing {
-      background: rgba(10, 10, 20, 0.7);
-      border-radius: var(--radius);
-      padding: 3rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .pricing.popular {
-      border: 2px solid var(--accent);
-      transform: scale(1.03);
-    }
-
-    .popular-tag {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--accent);
-      color: #000;
-      font-weight: 700;
-      padding: 0.3rem 1rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-    }
-
-    .price {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin: 1rem 0;
-    }
-
-    .features {
-      list-style: none;
-      margin: 1.5rem 0;
-      text-align: left;
-    }
-
-    .features li {
-      padding: 0.4rem 0;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .features li::before {
-      content: "✓";
-      color: var(--accent);
-      font-weight: bold;
-    }
-
-    /* Chart styles */
-    .chart-card {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .bar-chart {
-      display: flex;
-      flex-direction: column;
-      gap: 1.4rem;
-      width: 100%;
-      margin: 1.2rem 0;
+    /* =============== ГРАФИК =============== */
+    .chart {
+      margin: 2rem 0;
     }
 
     .bar-group {
       display: flex;
       align-items: flex-end;
-      gap: 0.8rem;
-      width: 100%;
+      gap: 1.2rem;
+      margin-bottom: 1.8rem;
     }
 
     .bar-label {
-      font-size: 0.9rem;
+      width: 80px;
+      font-size: 0.95rem;
       color: var(--muted);
-      width: 70px;
       text-align: right;
     }
 
     .bar-container {
       flex: 1;
-      height: 120px;
+      height: 140px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      position: relative;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
     }
 
     .bar {
-      width: 40px;
-      border-radius: 6px 6px 0 0;
-      transition: height 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+      width: 50px;
+      border-radius: 8px 8px 0 0;
+      transition: height 1.4s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
-    .bar.manual {
-      background: #4a5568;
-      height: var(--height);
-    }
-
-    .bar.autopost {
-      background: var(--accent);
-      height: var(--height);
-    }
+    .bar.manual { background: #3a3a5a; }
+    .bar.autopost { background: var(--accent); }
 
     .bar-value {
-      font-size: 0.9rem;
-      color: var(--fg);
-      width: 60px;
+      width: 70px;
       text-align: left;
+      font-size: 0.95rem;
+      color: var(--fg);
     }
 
-    /* FAQ */
-    .faq-item {
-      margin-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1.5rem;
-    }
-
-    footer {
+    /* =============== ТАРИФЫ =============== */
+    .pricing-card {
       text-align: center;
-      padding: 3rem 0 5rem;
+      padding: 2.5rem;
+      border-radius: var(--radius);
+      background: rgba(20, 20, 40, 0.4);
+      backdrop-filter: blur(20px);
+      position: relative;
+    }
+
+    .pricing-card.popular {
+      border: 1px solid var(--accent);
+      transform: scale(1.03);
+    }
+
+    .price {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin: 1.2rem 0;
+    }
+
+    .features {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+
+    .features li {
+      padding: 0.5rem 0;
+      color: var(--muted);
+    }
+
+    .features li::before {
+      content: "✓ ";
+      color: var(--accent);
+    }
+
+    /* =============== FOOTER =============== */
+    footer {
+      padding: 5rem 2rem 7rem;
+      text-align: center;
       color: var(--muted);
       font-size: 0.95rem;
     }
 
     @media (max-width: 600px) {
-      .container { padding: 0 1.5rem; }
-      section { padding: 3rem 0; }
-      .pricing { padding: 2rem 1.5rem; }
-      .bar-label, .bar-value { font-size: 0.8rem; }
-      .bar { width: 30px; }
+      .hero { padding: 6rem 1.5rem; }
+      section { padding: 5rem 1.5rem; }
+      .bar-label, .bar-value { font-size: 0.85rem; }
+      .bar { width: 36px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Hero -->
   <header class="hero">
     <div class="container">
-      <h1>Пиши один раз —<br>братва увидит везде</h1>
-      <p class="byline">Сервис автопостинга от <strong>ELRIV</strong>. Для стримеров, медийщиков и тех, кто держит эфир.</p>
+      <h1 id="hero-text">Пиши один раз.<br>Братва увидит везде.</h1>
+      <p>Сервис автопостинга от <strong>ELRIV</strong>. Для стримеров, медийщиков и тех, кто держит эфир.</p>
     </div>
   </header>
 
@@ -331,86 +274,36 @@
       </div>
     </section>
 
-    <!-- Статистика + График -->
+    <!-- Статистика -->
     <section id="stats">
       <div class="container">
         <h2>Цифры говорят громче</h2>
-        <div class="card-grid">
+        <div class="grid">
           <div class="card">
-            <div class="stat-number">55%</div>
+            <div class="stat"><span class="counter" data-target="55">0</span>%</div>
             <p>Быстрее публикация контента</p>
           </div>
-          <div class="card chart-card">
-            <h4>Охват: ручная публикация vs AutoPost</h4>
-            <div class="bar-chart">
-              <div class="bar-group">
-                <div class="bar-label">Ручная</div>
-                <div class="bar-container">
-                  <div class="bar manual" style="--height: 25%;"></div>
-                </div>
-                <div class="bar-value">1 200</div>
+          <div class="card chart">
+            <h3>Охват: ручная vs AutoPost</h3>
+            <div class="bar-group">
+              <div class="bar-label">Ручная</div>
+              <div class="bar-container">
+                <div class="bar manual" style="--height: 25%;"></div>
               </div>
-              <div class="bar-group">
-                <div class="bar-label">AutoPost</div>
-                <div class="bar-container">
-                  <div class="bar autopost" style="--height: 100%;"></div>
-                </div>
-                <div class="bar-value">4 800</div>
-              </div>
+              <div class="bar-value">1 200</div>
             </div>
-            <p style="margin-top: 1rem; font-size: 0.95rem; color: var(--muted);">
-              Синхронная публикация повышает охват на 300%
-            </p>
+            <div class="bar-group">
+              <div class="bar-label">AutoPost</div>
+              <div class="bar-container">
+                <div class="bar autopost" style="--height: 100%;"></div>
+              </div>
+              <div class="bar-value">4 800</div>
+            </div>
+            <p style="margin-top: 1.2rem; font-size: 0.95rem;">Синхронная публикация → +300% охвата</p>
           </div>
           <div class="card">
-            <div class="stat-number">90%</div>
+            <div class="stat"><span class="counter" data-target="90">0</span>%</div>
             <p>Клиентов — стримеры и медийщики</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Платформы -->
-    <section id="platforms">
-      <div class="container">
-        <h2>Поддерживаемые сети</h2>
-        <div class="platforms">
-          <div class="platform">
-            <svg class="platform-icon" viewBox="0 0 24 24" fill="#00f5d4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.5-11.5L13.5 11.5l-1-1-3.5 3.5-1-1 4.5-4.5 1 1 2.5 2.5z"/></svg>
-            <span>Telegram</span>
-          </div>
-          <div class="platform">
-            <svg class="platform-icon" viewBox="0 0 24 24" fill="#4a76a8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-11h-2v2h-2v2h2v2h2v-2h2v-2h-2V9z"/></svg>
-            <span>ВКонтакте</span>
-          </div>
-          <div class="platform">
-            <svg class="platform-icon" viewBox="0 0 24 24" fill="#f78f24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-11h-2v2h-2v2h2v2h2v-2h2v-2h-2V9z"/></svg>
-            <span>Одноклассники</span>
-          </div>
-          <div class="platform">
-            <svg class="platform-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-            <span>+ ещё</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Как работает -->
-    <section id="how">
-      <div class="container">
-        <h2>Как это работает</h2>
-        <div class="steps">
-          <div class="step">
-            <h4>Пишешь пост один раз</h4>
-            <p>Текст, картинки, видео — всё в одном редакторе.</p>
-          </div>
-          <div class="step">
-            <h4>Выбираешь площадки</h4>
-            <p>Telegram, ВК, OK — или все сразу. Можно настроить шаблоны.</p>
-          </div>
-          <div class="step">
-            <h4>Публикуешь мгновенно или по расписанию</h4>
-            <p>AutoPost делает всё сам. Ты — в эфире.</p>
           </div>
         </div>
       </div>
@@ -420,8 +313,8 @@
     <section id="pricing">
       <div class="container">
         <h2>Тарифы</h2>
-        <div class="card-grid">
-          <div class="card">
+        <div class="grid">
+          <div class="pricing-card">
             <h3>Free</h3>
             <div class="price">0 ₽</div>
             <p>Для старта</p>
@@ -431,53 +324,27 @@
               <li>Без расписания</li>
             </ul>
           </div>
-          <div class="card pricing popular">
-            <div class="popular-tag">Популярный</div>
+          <div class="pricing-card popular">
             <h3>Pro</h3>
             <div class="price">990 ₽/мес</div>
-            <p>Для стримеров и медийщиков</p>
+            <p>Для стримеров</p>
             <ul class="features">
               <li>Неограниченно постов</li>
-              <li>Все поддерживаемые сети</li>
-              <li>Планировщик до 30 дней</li>
-              <li>Аналитика охватов</li>
+              <li>Все сети</li>
+              <li>Планировщик</li>
+              <li>Аналитика</li>
             </ul>
           </div>
-          <div class="card">
+          <div class="pricing-card">
             <h3>Team</h3>
             <div class="price">2 490 ₽/мес</div>
-            <p>Для команд и агентств</p>
+            <p>Для агентств</p>
             <ul class="features">
               <li>Всё из Pro</li>
-              <li>До 5 пользователей</li>
+              <li>5 пользователей</li>
               <li>Общие шаблоны</li>
-              <li>Приоритетная поддержка</li>
+              <li>Поддержка</li>
             </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq">
-      <div class="container">
-        <h2>Частые вопросы</h2>
-        <div class="faq-list">
-          <div class="faq-item">
-            <h4>Нужно ли подтверждать приложение в ВК?</h4>
-            <p>Да, но мы поможем пройти верификацию — это займёт 1–2 дня.</p>
-          </div>
-          <div class="faq-item">
-            <h4>Можно ли постить в закрытые группы?</h4>
-            <p>Да, если у бота или токена есть права администратора.</p>
-          </div>
-          <div class="faq-item">
-            <h4>Есть ли пробный период?</h4>
-            <p>7 дней Pro-тарифа бесплатно — без карты.</p>
-          </div>
-          <div class="faq-item">
-            <h4>Где хранятся мои токены?</h4>
-            <p>Все данные шифруются AES-256 и хранятся в защищённой базе.</p>
           </div>
         </div>
       </div>
@@ -491,11 +358,50 @@
   </footer>
 
   <script>
+    // Плавная смена hero-текста
+    const heroText = document.getElementById('hero-text');
+    const phrases = [
+      "Пиши один раз.<br>Братва увидит везде.",
+      "Один пост.<br>Все площадки.",
+      "Ты — в эфире.<br>Мы — в теме."
+    ];
+    let i = 0;
+    setInterval(() => {
+      heroText.style.opacity = '0';
+      setTimeout(() => {
+        heroText.innerHTML = phrases[i % phrases.length];
+        heroText.style.opacity = '1';
+        i++;
+      }, 400);
+    }, 4000);
+
+    // Анимация счётчиков
+    function animateCounters() {
+      document.querySelectorAll('.counter').forEach(el => {
+        const target = +el.dataset.target;
+        let count = 0;
+        const step = target / 60;
+        const timer = setInterval(() => {
+          count += step;
+          if (count >= target) {
+            el.textContent = target;
+            clearInterval(timer);
+          } else {
+            el.textContent = Math.ceil(count);
+          }
+        }, 30);
+      });
+    }
+
     // Анимация при скролле
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
+          if (entry.target.id === 'stats') {
+            animateCounters();
+            observer.unobserve(entry.target);
+          }
         }
       });
     }, { threshold: 0.1 });
